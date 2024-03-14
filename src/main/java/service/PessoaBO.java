@@ -9,9 +9,9 @@ import model.repository.PessoaDAO;
 
 public class PessoaBO {
 	
-	public Pessoa cadastrarPessoaBO(Pessoa pessoa) {
+	public Pessoa cadastrarPessoaBO(Pessoa pessoa) throws ControleVacinasException {
 		PessoaDAO pessoaDAO = new PessoaDAO();
-		if (pessoaDAO.isEmpty()) {
+		if (((List<Pessoa>) pessoaDAO).isEmpty()) {
             throw new ControleVacinasException("Todos os campos são obrigatórios.");
         } else {
         	pessoa = pessoaDAO.cadastrarPessoaDAO(pessoa);

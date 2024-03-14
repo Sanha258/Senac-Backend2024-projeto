@@ -2,6 +2,7 @@ package controller;
 
 import java.util.List;
 
+import exeption.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -24,7 +25,7 @@ public class PessoaREST {
 	//@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa cadastrarPessoa(Pessoa pessoa) {
+	public Pessoa cadastrarPessoa(Pessoa pessoa) throws ControleVacinasException {
 		PessoaBO pessoaBO = new PessoaBO();
 		return pessoaBO.cadastrarPessoaBO(pessoa);
 	}
