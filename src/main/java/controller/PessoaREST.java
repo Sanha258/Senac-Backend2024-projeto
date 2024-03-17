@@ -21,13 +21,14 @@ import service.PessoaBO;
 @Path("/pessoa")
 public class PessoaREST {
 	
+	PessoaBO pessoaBO = new PessoaBO();
+	
 	@POST
 	//@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa cadastrarPessoa(Pessoa pessoa) throws ControleVacinasException {
-		PessoaBO pessoaBO = new PessoaBO();
-		return pessoaBO.cadastrarPessoaBO(pessoa);
+	public Pessoa cadastrarPessoa(Pessoa pessoa) throws ControleVacinasException {	
+		return pessoaBO.salvarPessoaBO(pessoa);
 	}
 	
 	@PUT
@@ -43,7 +44,6 @@ public class PessoaREST {
 	@Path("/listar/{idPessoa}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodasPessoas(@PathParam("idPessoa") int idPessoa) {
-		PessoaBO pessoaBO = new PessoaBO();
 		return pessoaBO.consultarTodasPessoasBO(idPessoa);
 	}
 	
@@ -52,7 +52,6 @@ public class PessoaREST {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Pessoa consultarPessoa(@PathParam("idPessoa") int idPessoa) {
-		PessoaBO pessoaBO = new PessoaBO();
 		return pessoaBO.consultarTodasPessoasBO(idPessoa);*/
 	
 	
@@ -63,7 +62,6 @@ public class PessoaREST {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean excluirPessoa(Pessoa pessoa) {
-		PessoaBO pessoaBO = new PessoaBO();
 		return pessoaBO.excluirPessoaBO(pessoa);
 	}
 

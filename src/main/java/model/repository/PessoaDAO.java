@@ -14,7 +14,7 @@ import model.entity.Pessoa;
 
 public class PessoaDAO {
 	
-	public Pessoa cadastrarPessoaDAO(Pessoa pessoa) {
+	public Pessoa salvarPessoaDAO(Pessoa pessoa) {
 		String query = "INSERT INTO pessoa (idPessoa, nome, dataNascimento, sexo, cpf) VALUES (?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
@@ -57,7 +57,7 @@ public class PessoaDAO {
 				pessoa.setIdPessoa(Integer.parseInt(resultado.getString(1)));
 				pessoa.setNome(resultado.getString(2));
 				pessoa.setDataNascimento(resultado.getDate(3));
-				pessoa.setSexo(resultado.getString(4).charAt(0));
+				pessoa.setSexo(resultado.getString(4).charAt(4));
 				pessoa.setCpf(resultado.getString(5));
 				
 				listaPessoas.add(pessoa);
@@ -74,27 +74,39 @@ public class PessoaDAO {
 	}
 	
 	public boolean atualizarPessoaDAO(Pessoa pessoa) {
-		Connection conn = Banco.getConnection();
-		Statement stmt = Banco.getStatement(conn);
-		boolean retorno = false;
-		String query = "UPDATE pessoa SET nome = '" + pessoa.getNome() 
-					+ "', dataNascimento = " + pessoa.getDataNascimento() 
-					+ ", sexo = '" + pessoa.getSexo() 
-					+ "', cpf = '" + pessoa.getCpf()
-					+ "' WHERE idpessoa = " + pessoa.getIdPessoa();
-		try {
-			if(stmt.executeUpdate(query) == 1) {
-				retorno = true;
-			}
-		} catch (SQLException erro) {
-			System.out.println("Erro ao executar a query do método atualizarPessoaDAO!");
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closeStatement(stmt);
-			Banco.closeConnection(conn);
-		}
-		return retorno;
+	    Connection conn = null;
+	    PreparedStatement stmt = null;
+	    ResultSet resultado = null;
+	    boolean cpfExiste = false;
+
+	    try {
+	        conn = Banco.getConnection();
+	        
+	        // Verifica se o CPF já existe na tabela pessoa
+	        String sql = "SELECT COUNT(*) FROM pessoa WHERE cpf = ?";
+	        stmt = conn.prepareStatement(sql);
+	        stmt.setString(1, pessoa.getCpf());
+	        resultado = stmt.executeQuery();
+	        
+	        if (resultado.next()) {
+	            int count = resultado.getInt(1);
+	            if (count > 0) {
+	                cpfExiste = true;
+	            }
+	        }
+
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao executar a query do método atualizarPessoaDAO!");
+	        System.out.println("Erro: " + erro.getMessage());
+	    } finally {
+	        Banco.closeResultSet(resultado);
+	        Banco.closeStatement(stmt);
+	        Banco.closeConnection(conn);
+	    }
+	    
+	    return cpfExiste;
 	}
+
 
 	public boolean excluirPessoaDAO(Pessoa pessoa) {
 		Connection conn = Banco.getConnection();

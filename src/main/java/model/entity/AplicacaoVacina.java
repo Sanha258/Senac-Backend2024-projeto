@@ -1,18 +1,22 @@
 package model.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AplicacaoVacina {
 	
-	 private Date dataAplicacao;
-	 private Pessoa pessoa;
-	 private int reacao; // Avaliação da reação (1 a 5)
+	 private int idAplicaçaoVacina;
+	 private int idPessoa;
+	 private Vacina vacina;
+	 private LocalDate dataVacina;
+	 private int avalicao;
 	
-	 public AplicacaoVacina(Date dataAplicacao, Pessoa pessoa, int reacao) {
+	 public AplicacaoVacina(int idAplicaçaoVacina, int idPessoa, Vacina vacina, LocalDate dataVacina, int avalicao) {
 		super();
-		this.dataAplicacao = dataAplicacao;
-		this.pessoa = pessoa;
-		this.reacao = reacao;
+		this.idAplicaçaoVacina = idAplicaçaoVacina;
+		this.idPessoa = idPessoa;
+		this.vacina = vacina;
+		this.dataVacina = dataVacina;
+		this.avalicao = avalicao;
 	}
 
 	public AplicacaoVacina() {
@@ -20,29 +24,46 @@ public class AplicacaoVacina {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Date getDataAplicacao() {
-		return dataAplicacao;
+	public int getIdAplicaçaoVacina() {
+		return idAplicaçaoVacina;
 	}
 
-	public void setDataAplicacao(Date dataAplicacao) {
-		this.dataAplicacao = dataAplicacao;
+	public void setIdAplicaçaoVacina(int idAplicaçaoVacina) {
+		this.idAplicaçaoVacina = idAplicaçaoVacina;
 	}
 
-	public Pessoa getPessoa() {
-		return pessoa;
+	public int getIdPessoa() {
+		return idPessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
+	public void setIdPessoa(int idPessoa) {
+		this.idPessoa = idPessoa;
 	}
 
-	public int getReacao() {
-		return reacao;
+	public Vacina getVacina() {
+		return vacina;
 	}
 
-	public void setReacao(int reacao) {
-		this.reacao = reacao;
+	public void setVacina(Vacina vacina) {
+		this.vacina = vacina;
 	}
+
+	public LocalDate getDataVacina() {
+		return dataVacina;
+	}
+
+	public void setDataVacina(LocalDate dataVacina) {
+		this.dataVacina = dataVacina;
+	}
+
+	public int getAvalicao() {
+		return avalicao;
+	}
+
+	public void setAvalicao(int avalicao) {
+		this.avalicao = avalicao;
+	}
+	 
 	 
 	 
 
