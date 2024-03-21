@@ -1,6 +1,6 @@
 package exeption;
 
-public class ControleVacinasException extends Exception{
+public class vacinacaoException extends Exception{
 	
 	/**
 	 * 
@@ -8,7 +8,7 @@ public class ControleVacinasException extends Exception{
 	private static final long serialVersionUID = 1L;
 
 
-	public ControleVacinasException(String mensagem) {
+	public vacinacaoException(String mensagem) {
 		
 		super(mensagem);
 		

@@ -1,6 +1,7 @@
 package model.entity;
 
 import java.sql.Date;
+
 import java.util.List;
 
 public class Pessoa {
@@ -52,8 +53,8 @@ public class Pessoa {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
+	public void setDataNascimento(Date localDate) {
+		this.dataNascimento = localDate;
 	}
 
 	public char getSexo() {
