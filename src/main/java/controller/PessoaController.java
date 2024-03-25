@@ -26,14 +26,14 @@ private PessoaService service = new PessoaService();
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa salvar(Pessoa novaPessoa) throws VacinacaoException{
+	public Pessoa salvar(Pessoa novaPessoa) throws vacinacaoException{
 		 return service.salvar(novaPessoa);
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public boolean atualizar(Pessoa pessoaEditada) throws VacinacaoException{
+	public boolean atualizar(Pessoa pessoaEditada) throws vacinacaoException{
 		 return service.atualizar(pessoaEditada);
 	}
 	

@@ -6,17 +6,17 @@ import java.time.LocalDate;
 public class Vacina {
 	
 	private int idVacina;
-	private String paisOrigem;
+	private Pais pais;
 	private String nomeVacina;
     private LocalDate dataInicioPesquisa;
     private Pessoa pesquisadorResponsavel;
     private int estagio;
     
-	public Vacina(int idVacina, String paisOrigem, String nomeVacina, LocalDate dataInicioPesquisa,
+	public Vacina(int idVacina, Pais pais, String nomeVacina, LocalDate dataInicioPesquisa,
 			Pessoa pesquisadorResponsavel, int estagio) {
 		super();
 		this.idVacina = idVacina;
-		this.paisOrigem = paisOrigem;
+		this.pais = pais;
 		this.nomeVacina = nomeVacina;
 		this.dataInicioPesquisa = dataInicioPesquisa;
 		this.pesquisadorResponsavel = pesquisadorResponsavel;
@@ -36,12 +36,12 @@ public class Vacina {
 		this.idVacina = idVacina;
 	}
 
-	public String getPaisOrigem() {
-		return paisOrigem;
+	public Pais getPais() {
+		return pais;
 	}
 
-	public void setPaisOrigem(String paisOrigem) {
-		this.paisOrigem = paisOrigem;
+	public void setPais(Pais string) {
+		this.pais = string;
 	}
 
 	public String getNomeVacina() {
@@ -75,7 +75,8 @@ public class Vacina {
 	public void setEstagio(int estagio) {
 		this.estagio = estagio;
 	}
-	
     
+	
+	
 
 }

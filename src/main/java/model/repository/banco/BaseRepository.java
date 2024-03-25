@@ -2,6 +2,7 @@ package model.repository.banco;
 
 import java.util.ArrayList;
 
+
 /**
 	 * 
 	 * Interface que contém os métodos que todos os DAOs devem implementar.
@@ -59,5 +60,7 @@ import java.util.ArrayList;
 		 */
 		public ArrayList<T> consultarTodos();
 
+		
+ 
 
 }

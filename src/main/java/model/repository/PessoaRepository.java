@@ -6,10 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import model.entity.Pessoa;
 import model.repository.banco.Banco;
+import model.repository.banco.BaseRepository;
 
 
 
@@ -26,13 +27,13 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			stmt.setString(1, novaPessoa.getNome());
 			stmt.setString(2, novaPessoa.getCpf());
 			stmt.setString(3, novaPessoa.getSexo() + "");
-			stmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
+			stmt.setDate(4, java.sql.Date.valueOf(novaPessoa.getDataNascimento()));
 			stmt.setInt(5, novaPessoa.getTipo());
 			
 			stmt.execute();
 			ResultSet resultado = stmt.getGeneratedKeys();
 			if(resultado.next()) {
-				novaPessoa.setId(resultado.getInt(1));
+				novaPessoa.setIdPessoa(resultado.getInt(1));
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao salvar nova pessoa");
@@ -74,10 +75,10 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			stmt.setString(1, pessoaEditada.getNome());
 			stmt.setString(2, pessoaEditada.getCpf());
 			stmt.setString(3, pessoaEditada.getSexo() + "");
-			stmt.setDate(4, Date.valueOf(pessoaEditada.getDataNascimento()));
+			stmt.setDate(4, java.sql.Date.valueOf(pessoaEditada.getDataNascimento()));
 			stmt.setInt(5, pessoaEditada.getTipo());
 			
-			stmt.setInt(6, pessoaEditada.getId());
+			stmt.setInt(6, pessoaEditada.getIdPessoa());
 			alterou = stmt.executeUpdate() > 0;
 		} catch (SQLException erro) {
 			System.out.println("Erro ao atualizar pessoa");
@@ -90,19 +91,19 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 	}
 
 	@Override
-	public Pessoa consultarPorId(int id) {
+	public Pessoa consultarPorId(int idPessoa) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
 		Pessoa pessoa = null;
 		ResultSet resultado = null;
-		String query = " SELECT * FROM pessoa WHERE id = " + id;
+		String query = " SELECT * FROM pessoa WHERE id = " + idPessoa;
 		
 		try{
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()){
 				pessoa = new Pessoa();
-				pessoa.setId(resultado.getInt("ID"));
+				pessoa.setIdPessoa(resultado.getInt("ID"));
 				pessoa.setNome(resultado.getString("NOME"));
 				pessoa.setCpf(resultado.getString("CPF"));
 				pessoa.setSexo(resultado.getString("SEXO").charAt(0));
@@ -110,7 +111,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 				pessoa.setTipo(resultado.getInt("TIPO"));
 			}
 		} catch (SQLException erro){
-			System.out.println("Erro ao consultar pessoa com o id: " + id);
+			System.out.println("Erro ao consultar pessoa com o id: " + idPessoa);
 			System.out.println("Erro: " + erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
@@ -133,7 +134,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
 				Pessoa pessoa = new Pessoa();
-				pessoa.setId(resultado.getInt("ID"));
+				pessoa.setIdPessoa(resultado.getInt("ID"));
 				pessoa.setNome(resultado.getString("NOME"));
 				pessoa.setCpf(resultado.getString("CPF"));
 				pessoa.setSexo(resultado.getString("SEXO").charAt(0));

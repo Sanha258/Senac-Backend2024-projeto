@@ -6,8 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import model.entity.Vacinacao;
 import model.repository.banco.Banco;
+import model.repository.banco.BaseRepository;
 
 public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	
@@ -20,7 +24,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		
 		try {
 			stmt.setInt(1, novaVacinacao.getIdPessoa());
-			stmt.setInt(2, novaVacinacao.getVacina().getId());
+			stmt.setInt(2, novaVacinacao.getVacina().getIdVacina());
 			stmt.setDate(3, Date.valueOf(novaVacinacao.getDataAplicacao()));
 			stmt.setInt(4, novaVacinacao.getAvaliacao());
 			
@@ -68,7 +72,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		PreparedStatement stmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			stmt.setInt(1, vacinacaoEditada.getIdPessoa());
-			stmt.setInt(2, vacinacaoEditada.getVacina().getId());
+			stmt.setInt(2, vacinacaoEditada.getVacina().getIdVacina());
 			stmt.setDate(3, Date.valueOf(vacinacaoEditada.getDataAplicacao()));
 			stmt.setInt(4, vacinacaoEditada.getAvaliacao());
 			
@@ -148,4 +152,33 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		return aplicacoes;
 	}
 
+	public ArrayList<Vacinacao> consultarPorIdPessoa(int id) {
+		ArrayList<Vacinacao> aplicacoes = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		String query = " SELECT * FROM VACINACAO WHERE ID PESSOA = ?";
+		
+		try{
+			resultado = stmt.executeQuery(query);
+			VacinaRepository vacinaRepository = new VacinaRepository();
+			while(resultado.next()){
+				Vacinacao vacinacao = new Vacinacao();
+				vacinacao.setIdPessoa(resultado.getInt);// corrigir esse erro
+				aplicacoes.add(vacinacao);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro consultar pessoa por id nas aplicações de vacinas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		
+		return aplicacoes;
+	}
+
+	
 }

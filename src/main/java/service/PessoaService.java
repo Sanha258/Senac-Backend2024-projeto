@@ -11,7 +11,7 @@ public class PessoaService {
 	
 private PessoaRepository repository = new PessoaRepository();
 	
-	public Pessoa salvar(Pessoa novaPessoa) throws VacinacaoException {
+	public Pessoa salvar(Pessoa novaPessoa) throws vacinacaoException {
 		validarCamposObrigatorios(novaPessoa);
 		
 		validarCpf(novaPessoa);
@@ -19,7 +19,7 @@ private PessoaRepository repository = new PessoaRepository();
 		return repository.salvar(novaPessoa);
 	}
 	
-	public boolean atualizar(Pessoa pessoaEditada) throws VacinacaoException {
+	public boolean atualizar(Pessoa pessoaEditada) throws vacinacaoException {
 		validarCamposObrigatorios(pessoaEditada);
 		
 		//TODO porque não valido o CPF? Veremos em sala
@@ -41,11 +41,11 @@ private PessoaRepository repository = new PessoaRepository();
 	
 	private void validarCpf(Pessoa novaPessoa) throws vacinacaoException {
 		if(repository.cpfJaCadastrado(novaPessoa.getCpf())) {
-			throw new VacinacaoException("CPF " + novaPessoa.getCpf() + " já cadastrado "); 
+			throw new vacinacaoException("CPF " + novaPessoa.getCpf() + " já cadastrado "); 
 		}
 	}
 
-	private void validarCamposObrigatorios(Pessoa p) throws VacinacaoException{
+	private void validarCamposObrigatorios(Pessoa p) throws vacinacaoException{
 		String mensagemValidacao = "";
 		if(p.getNome() == null || p.getNome().isEmpty()) {
 			mensagemValidacao += " - informe o nome \n";
@@ -64,7 +64,7 @@ private PessoaRepository repository = new PessoaRepository();
 		}
 		
 		if(!mensagemValidacao.isEmpty()) {
-			throw new VacinacaoException("Preencha o(s) seguinte(s) campo(s) \n " + mensagemValidacao);
+			throw new vacinacaoException("Preencha o(s) seguinte(s) campo(s) \n " + mensagemValidacao);
 		}
 	}
 

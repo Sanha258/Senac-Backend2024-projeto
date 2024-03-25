@@ -5,32 +5,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import com.mysql.jdbc.Connection;
 
+import model.entity.Pessoa;
 import model.entity.Vacina;
 import model.repository.banco.Banco;
+import model.repository.banco.BaseRepository;
 
 public class VacinaRepository implements BaseRepository<Vacina>{
 	
 	@Override
 	public Vacina salvar(Vacina novaVacina) {
-		String sql = " INSERT INTO vacina(id_pesquisador, nome, pais_origem, estagio_pesquisa, data_inicio_pesquisa) "
+		String sql = " INSERT INTO vacina(id_pesquisador, nome, pais, estagio_pesquisa, data_inicio_pesquisa) "
 				   + " VALUES(?, ?, ?, ?, ?) ";
-		Connection conexao = Banco.getConnection();
+		Connection conexao =  (Connection) Banco.getConnection();
 		PreparedStatement stmt = Banco.getPreparedStatementWithPk(conexao, sql);
 		
 		try {
-			stmt.setInt(1, novaVacina.getPesquisadorResponsavel().getId());
-			stmt.setString(2, novaVacina.getNome());
-			stmt.setString(3, novaVacina.getPaisOrigem());
+	        stmt.setInt(1, novaVacina.getPesquisadorResponsavel().getIdPessoa());
+			stmt.setString(2, novaVacina.getNomeVacina());
+			stmt.setInt(3, novaVacina.getPais().getIdPais());
 			stmt.setInt(4, novaVacina.getEstagio());
-			stmt.setDate(5, Date.valueOf(novaVacina.getDataInicioPesquisa()));
-			
+            stmt.setDate(5, java.sql.Date.valueOf(novaVacina.getDataInicioPesquisa()));
+   
 			stmt.execute();
 			ResultSet resultado = stmt.getGeneratedKeys();
 			if(resultado.next()) {
-				novaVacina.setId(resultado.getInt(1));
+				novaVacina.setIdVacina(resultado.getInt(1));
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao salvar nova vacina");
@@ -41,11 +42,13 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	}
 
 	@Override
-	public boolean excluir(int id) {
+	public boolean excluir(int idVacina) {
+		com.mysql.jdbc.Connection conexao = null;
+
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		boolean excluiu = false;
-		String query = "DELETE FROM vacina WHERE id = " + id;
+		String query = "DELETE FROM vacina WHERE id = " + idVacina;
 		try {
 			if(stmt.executeUpdate(query) == 1) {
 				excluiu = true;
@@ -64,20 +67,19 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	public boolean alterar(Vacina vacinaEditada) {
 		boolean alterou = false;
 		String query = " UPDATE vacina "
-				     + " SET id_pesquisador=?, nome=?, pais_origem=?, estagio_pesquisa=?, data_inicio_pesquisa=? "
+				     + " SET id_pesquisador=?, nome=?, pais=?, estagio_pesquisa=?, data_inicio_pesquisa=? "
 				     + " WHERE id=? ";
 		Connection conn = Banco.getConnection();
 		PreparedStatement stmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
-			stmt.setInt(1, vacinaEditada.getPesquisadorResponsavel().getId());
-			stmt.setString(2, vacinaEditada.getNome());
-			stmt.setString(3, vacinaEditada.getPaisOrigem());
+			stmt.setInt(1, vacinaEditada.getPesquisadorResponsavel().getIdPessoa());
+			stmt.setString(2, vacinaEditada.getNomeVacina());
+			stmt.setInt(3, vacinaEditada.getPais().getIdPais());
 			stmt.setInt(4, vacinaEditada.getEstagio());
-			stmt.setDate(5, Date.valueOf(vacinaEditada.getDataInicioPesquisa()));
-			
-			
-			stmt.setInt(6, vacinaEditada.getId());
+			stmt.setDate(5, java.sql.Date.valueOf (vacinaEditada.getDataInicioPesquisa()));
+			stmt.setInt(6, vacinaEditada.getIdVacina());
 			alterou = stmt.executeUpdate() > 0;
+			
 		} catch (SQLException erro) {
 			System.out.println("Erro ao atualizar vacina");
 			System.out.println("Erro: " + erro.getMessage());
@@ -89,29 +91,29 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	}
 
 	@Override
-	public Vacina consultarPorId(int id) {
+	public Vacina consultarPorId(int idVacina) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
 		Vacina vacina = null;
 		ResultSet resultado = null;
-		String query = " SELECT * FROM vacina WHERE id = " + id;
+		String query = " SELECT * FROM vacina WHERE id = " + idVacina;
 		
 		try{
 			resultado = stmt.executeQuery(query);
 			PessoaRepository pessoaRepository = new PessoaRepository();
 			if(resultado.next()){
 				vacina = new Vacina();
-				vacina.setId(Integer.parseInt(resultado.getString("ID")));
-				vacina.setNome(resultado.getString("NOME"));
-				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setIdVacina(Integer.parseInt(resultado.getString("ID")));
+				vacina.setNomeVacina(resultado.getString("NOME"));
+				vacina.setPais(Integer.parseInt(resultado.getString("PAIS")));
 				vacina.setEstagio(resultado.getInt("ESTAGIO_PESQUISA"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate()); 
 				Pessoa pesquisador = pessoaRepository.consultarPorId(resultado.getInt("ID_PESQUISADOR"));
 				vacina.setPesquisadorResponsavel(pesquisador);
 			}
 		} catch (SQLException erro){
-			System.out.println("Erro ao consultar vacina com o id: " + id);
+			System.out.println("Erro ao consultar vacina com o id: " + idVacina);
 			System.out.println("Erro: " + erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
@@ -135,9 +137,9 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 			PessoaRepository pessoaRepository = new PessoaRepository();
 			while(resultado.next()){
 				Vacina vacina = new Vacina();
-				vacina.setId(Integer.parseInt(resultado.getString("ID")));
-				vacina.setNome(resultado.getString("NOME"));
-				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setIdVacina(Integer.parseInt(resultado.getString("ID")));
+				vacina.setNomeVacina(resultado.getString("NOME"));
+				vacina.setPais(resultado.getString("PAIS"));
 				vacina.setEstagio(resultado.getInt("ESTAGIO_PESQUISA"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate()); 
 				Pessoa pesquisador = pessoaRepository.consultarPorId(resultado.getInt("ID_PESQUISADOR"));

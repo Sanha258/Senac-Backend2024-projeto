@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -9,6 +11,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.entity.Vacina;
+import service.VacinaService;
 
 @Path("/vacina")
 
@@ -47,6 +51,9 @@ public class VacinaController {
 		public List<Vacina> consultarTodas(){
 			 return service.consultarTodas();
 		}
+		
+		
+		
 		
 
 }

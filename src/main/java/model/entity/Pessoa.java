@@ -1,22 +1,20 @@
 package model.entity;
 
-import java.sql.Date;
-
+import java.time.LocalDate;
 import java.util.List;
 
 public class Pessoa {
 	
 	private int idPessoa;
 	private String nome;
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 	private char sexo;
 	private String cpf;
-	private String tipo;
-	private List<AplicacaoVacina> vacinacoes;
+	private int tipo;
+	
 
 
-	public Pessoa(int idPessoa, String nome, Date dataNascimento, char sexo, String cpf, String tipo,
-			List<AplicacaoVacina> vacinacoes) {
+	public Pessoa(int idPessoa, String nome, LocalDate dataNascimento, char sexo, String cpf, int tipo) {
 		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
@@ -24,7 +22,7 @@ public class Pessoa {
 		this.sexo = sexo;
 		this.cpf = cpf;
 		this.tipo = tipo;
-		this.vacinacoes = vacinacoes;
+		
 	}
 
 	public Pessoa() {
@@ -49,11 +47,11 @@ public class Pessoa {
 		this.nome = nome;
 	}
 
-	public Date getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Date localDate) {
+	public void setDataNascimento(LocalDate localDate) {
 		this.dataNascimento = localDate;
 	}
 
@@ -73,26 +71,23 @@ public class Pessoa {
 		this.cpf = cpf;
 	}
 
-	public String getTipo() {
+	public int getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(int tipo) {
 		this.tipo = tipo;
 	}
 
-	public List<AplicacaoVacina> getVacinacoes() {
-		return vacinacoes;
-	}
-
-	public void setVacinacoes(List<AplicacaoVacina> vacinacoes) {
-		this.vacinacoes = vacinacoes;
-	}
 
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
+
+
 	
 	
 
