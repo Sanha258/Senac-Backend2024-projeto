@@ -43,9 +43,9 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 
 	@Override
 	public boolean excluir(int idVacina) {
-		com.mysql.jdbc.Connection conexao = null;
+		//com.mysql.jdbc.Connection conexao = null;
 
-		Connection conn = Banco.getConnection();
+		Connection conn = (Connection) Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		boolean excluiu = false;
 		String query = "DELETE FROM vacina WHERE id = " + idVacina;
@@ -69,7 +69,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		String query = " UPDATE vacina "
 				     + " SET id_pesquisador=?, nome=?, pais=?, estagio_pesquisa=?, data_inicio_pesquisa=? "
 				     + " WHERE id=? ";
-		Connection conn = Banco.getConnection();
+		Connection conn = (Connection) Banco.getConnection();
 		PreparedStatement stmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			stmt.setInt(1, vacinaEditada.getPesquisadorResponsavel().getIdPessoa());
@@ -92,7 +92,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 
 	@Override
 	public Vacina consultarPorId(int idVacina) {
-		Connection conn = Banco.getConnection();
+		Connection conn = (Connection) Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
 		Vacina vacina = null;
@@ -106,7 +106,9 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 				vacina = new Vacina();
 				vacina.setIdVacina(Integer.parseInt(resultado.getString("ID")));
 				vacina.setNomeVacina(resultado.getString("NOME"));
-				vacina.setPais(Integer.parseInt(resultado.getString("PAIS")));
+				
+				PaisRepository paisRepository = new PaisRepository();
+				vacina.setPais(paisRepository.consultarPorId(resultado.getInt("ID_PAIS")));
 				vacina.setEstagio(resultado.getInt("ESTAGIO_PESQUISA"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate()); 
 				Pessoa pesquisador = pessoaRepository.consultarPorId(resultado.getInt("ID_PESQUISADOR"));
@@ -126,7 +128,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	@Override
 	public ArrayList<Vacina> consultarTodos() {
 		ArrayList<Vacina> vacinas = new ArrayList<>();
-		Connection conn = Banco.getConnection();
+		Connection conn = (Connection) Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
 		ResultSet resultado = null;
@@ -139,7 +141,9 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 				Vacina vacina = new Vacina();
 				vacina.setIdVacina(Integer.parseInt(resultado.getString("ID")));
 				vacina.setNomeVacina(resultado.getString("NOME"));
-				vacina.setPais(resultado.getString("PAIS"));
+				
+				PaisRepository paisRepository = new PaisRepository();
+				vacina.setPais(paisRepository.consultarPorId(resultado.getInt("ID_PAIS")));
 				vacina.setEstagio(resultado.getInt("ESTAGIO_PESQUISA"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate()); 
 				Pessoa pesquisador = pessoaRepository.consultarPorId(resultado.getInt("ID_PESQUISADOR"));

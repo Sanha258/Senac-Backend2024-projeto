@@ -108,6 +108,8 @@ public class Banco {
 			System.out.println("Problema no fechamento do ResultSet");
 			System.out.println("Erro: " + e.getMessage());
 		}
-	}		
+	}
+	
+		
 
 }
